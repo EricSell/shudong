@@ -1,0 +1,130 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>树洞先生 - 管理员系统</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css' ) }}">
+    <script type="text/javascript" src="{{ url_for('static',filename='admin/login/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='layui/layui.js') }}" type="text/javascript"></script>
+
+    {% block extcss %}
+    {% endblock %}
+</head>
+
+<div style="height:50%">
+    <table id="article_list" class="layui-table" lay-filter="article_list">
+    </table>
+</div>
+
+
+<script type="text/html" id="toolbarDemo">
+
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">全选删除</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
+
+
+    function change_id_list(data) {
+        let res_list = [];
+        $.each(data, function (index, val) {
+            res_list.push(val.id)
+        });
+        return {'id': res_list}
+    }
+
+
+    layui.use('table', function () {
+        var table = layui.table;
+        var article_type = "{{ type }}";
+
+
+        // 删除文章
+        function del_title(obj, index, del_data) {
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('admin.sd_admin_artdel_port') }}",
+                async: true,
+                data: {
+                    'id': JSON.stringify(del_data),
+                },// 参数
+
+                success: (function (res) {
+                    layer.msg(res['msg']);
+                    if (res['code'] == 200) {
+                        table.reload('article_list', {});
+                    }
+                }),
+
+                error: (function (e) {
+                    console.log(e)
+                })
+            })
+        }
+
+
+        var total_url = "{{ url_for('admin.sd_admin_deltype_iframe_port',type_id=id) }}"
+        // 渲染table
+        table.render({
+            elem: '#article_list'
+            , height: 'full-200'
+            , width: 'full-300'
+            , cellMinWidth: 80
+            , limit: 5
+            , limits: [5, 10, 20]
+            , url: total_url
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print']
+            , title: '文章列表'
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true}
+                , {field: 'name', title: '文章名称', width: 100,}
+                , {field: 'content', title: '文章内容', minWidth: 800, sort: true}
+                , {field: 'type', align: 'middle', title: '文章类别', width: 133}
+                , {field: 'time', sort: true, align: 'middle', width: 133, title: '文章时间'}
+                , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', width: 165}
+            ]]
+            , page: true
+        });
+
+
+        //监听行工具事件
+        //头工具栏事件
+        table.on('toolbar(article_list)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'getCheckData':
+                    if (!checkStatus.isAll) {
+                        layer.msg('未全选');
+                        break
+                    }
+                    layer.confirm('真的删除行么', function (index) {
+                        console.log(obj, '2222')
+                        var data = checkStatus.data;
+                        var del_data = change_id_list(data)
+                        del_title(obj, index, del_data)
+                    });
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(article_list)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    let data_list = {'id': [data.id]}
+                    del_title(obj, index, data_list)
+                });
+            } else if (obj.event === 'open_detail') {
+                location.href = $('.loc').attr('loc').split('/')[1] + '/' + data.id;
+            }
+        });
+    });
+</script>
+</html>

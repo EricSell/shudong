@@ -1,0 +1,82 @@
+{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="width: 40%;margin: auto;margin-top: 40px;border: 1px solid #009688;">
+        <legend>用户登陆</legend>
+        <div class="layui-field-box">
+            <div style="margin: auto;">
+                <form class="layui-form" action="{{ url_for('shudong.user_register') }}" method="post">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">手机号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="phone" required lay-verify="phone" placeholder="请输入手机号"
+                                   autocomplete="off" class="layui-input" style="width:81%">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">密码</label>
+                        <div class="layui-input-block">
+                            <input type="password" name="password" required lay-verify="pass" placeholder="请输入密码"
+                                   autocomplete="off" class="layui-input" style="width:81%">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </fieldset>
+
+{% endblock %}
+
+{% block extjs %}
+    <script>
+        function alert_msg(data) {
+            layer.msg(data['msg']);
+        }
+
+        //Demo
+        layui.use('form', function () {
+            var form = layui.form;
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('shudong.user_login') }}",
+                    async: true,
+                    data: {
+                        'phone': data.field.phone,
+                        'password': data.field.password,
+                    },// 参数
+
+                    success: (function (res) {
+                        alert_msg(res);
+                        setTimeout(function() { $(window).attr('location',"{{ url_for('shudong.index') }}"); }, 1500, )
+                    }),
+
+                    error: (function (e) {
+                        console.log(e)
+                    })
+                })
+                return false;
+            });
+
+            // 表单验证
+            form.verify({
+                pass: [
+                    /^[\S]{6,12}$/
+                    , '密码必须6到12位，且不能出现空格哦'
+                ]
+            });
+        });
+
+
+
+
+    </script>
+{% endblock %}

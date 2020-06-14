@@ -1,0 +1,30 @@
+﻿{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="margin-top: 15px;border-color: #00968875">
+        <legend>联系导师</legend>
+        <div class="layui-field-box">
+            <div style="min-height: 300px;width: 67%;margin: auto; ">
+                {% for teacher in teachers %}
+                    <div style="border-bottom:1px solid #00968875;width: 100%;min-height: 120px;margin-bottom: 45px;float:left;">
+                        {% if teacher.image %}
+                        <img style="height:123px;width:95px;float:left;margin-bottom: 8px;" src="{{ url_for('static',filename=teacher.image) }}" alt="">
+                        {% endif %}
+                        <div style="width: 86%;float: right">
+                            <div style="float:left;font-size: 20px;margin: 10px 0 0 20px;width: 100%">导师姓名:&nbsp;&nbsp;{{ teacher.name }}</div>
+                            <div style="float:left;font-size: 18px;margin: 10px 0 0 20px;width: 100%">联系邮箱:&nbsp;&nbsp;{{ teacher.email }}</div>
+                            <div style="float:left;font-size: 15px;margin: 10px 0 10px 20px;width: 100%">导师简介:&nbsp;&nbsp;{{ teacher.content }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </fieldset>
+{% endblock %}
+
+{% block extjs %}
+    <script>
+
+
+    </script>
+{% endblock %}

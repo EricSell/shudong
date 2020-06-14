@@ -1,0 +1,101 @@
+{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="margin-top: 15px;border-color: #00968875">
+        <legend>树洞能量</legend>
+        <div class="layui-field-box">
+            <article style="width: 100%;margin-top:35px;height:500px; ">
+                <aside class="l_box">
+                    <div class="fenlei">
+                        <h2 style="padding: 0;text-align: center;background: #009688bd;color:white">文章分类</h2>
+                        <ul style="text-align: center;">
+                            <li class="article" style="color:red;cursor: pointer" a_id="0">
+                                <a href="{{ url_for('shudong.article_select',type_id=0) }}" style="color: red">
+                                    全部 [ {{ article | length }} ]
+                                </a>
+                            </li>
+                            {% for type in types %}
+                                <li class="article" style="cursor: pointer" a_id="{{ type.id }}">
+                                    <a href="{{ url_for('shudong.article_select',type_id=type.id) }}">
+                                        {{ type.type_name }} [ {{ type.articles | length }} ]
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </aside>
+                <main class="r_box">
+                    <div id="article" style="height:450px;"></div>
+                    <div id="page" style="margin: auto;text-align: center"></div>
+                    <div id="article_type" style="display: none">0</div>
+                    <div id="article_sum" style="display: none">{{ pages }}</div>
+                </main>
+            </article>
+        </div>
+    </fieldset>
+
+
+{% endblock %}
+
+{% block extjs %}
+    <script>
+        function showRecord(pageNo, pageSize) {
+            $.get("{{ url_for('shudong.get_all_article') }}",
+                {
+                    page: pageNo,
+                    per_page: pageSize,
+                },
+                function (date) {
+                    let res = date.articles
+                    console.log(res)
+                    //加载后台返回的List集合数据
+                    for (var i = 0; i < res.length; i++) {
+                        var a = $("<a href=\"#\" style=\"color:#009688bd;font-size: 19px;  padding-left: 15px;\"></a>").text(res[i][1]);
+                        var div1 = $("<div style=\"margin-left: 100px;border-bottom: 1px solid #009688bd;margin-bottom: 15px;\"></div>").append(a);
+                        var div2 = $("<div class=\"layui-anim layui-anim-up\" style=\"width:90%;\"></div>").append(div1);
+                        a.attr('href','/article_detail/'+res[i][0])
+                        $('#article').append(div2);
+                    }
+                },
+                "json"
+            );
+        }
+
+
+        var total = $('#article_sum').text();
+
+        //先初始化加载首页，十条数据
+        showRecord(1, 10);
+
+        layui.use(['laypage', 'jquery'], function () {
+
+            var laypage = layui.laypage, $ = layui.$;
+
+            laypage.render({
+                elem: $("#page")
+                , count: total //数据总数，从服务端得到
+                , limit: 10                      //默认每页显示条数
+                , limits: [10, 20, 30]			//可选每页显示条数
+                , curr: 1                        //起始页
+                , groups: 5                      //连续页码个数
+                , prev: '上一页'                 //上一页文本
+                , netx: '下一页'                 //下一页文本
+                , first: 1                      //首页文本
+                , last: 100                     //尾页文本
+                , layout: ['prev', 'page', 'next']
+                //跳转页码时调用
+                , jump: function (obj, first) { //obj为当前页的属性和方法，第一次加载first为true
+                    //非首次加载 do something
+                    if (!first) {
+                        //清空以前加载的数据
+                        $('#article').empty();
+                        //调用加载函数加载数据
+                        showRecord(obj.curr, obj.limit);
+                    }
+                }
+            });
+        })
+
+
+    </script>
+{% endblock %}

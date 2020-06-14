@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>树洞先生 - 管理员系统</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css' ) }}">
+    <script type="text/javascript" src="{{ url_for('static',filename='admin/login/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='layui/layui.js') }}" type="text/javascript"></script>
+
+    {% block extcss %}
+    {% endblock %}
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">树洞先生 - 管理员系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        {#    <ul class="layui-nav layui-layout-left">#}
+        {#      <li class="layui-nav-item"><a href="">控制台</a></li>#}
+        {#      <li class="layui-nav-item"><a href="">商品管理</a></li>#}
+        {#      <li class="layui-nav-item"><a href="">用户</a></li>#}
+        {#      <li class="layui-nav-item">#}
+        {#        <a href="javascript:;">其它系统</a>#}
+        {#        <dl class="layui-nav-child">#}
+        {#          <dd><a href="">邮件管理</a></dd>#}
+        {#          <dd><a href="">消息管理</a></dd>#}
+        {#          <dd><a href="">授权管理</a></dd>#}
+        {#        </dl>#}
+        {#      </li>#}
+        {#    </ul>#}
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <span style="margin-right: 50px;" id="user_type"
+                          user_type={{ admin_info.admin_type }} user_id={{ admin_info.id }}>当前用户身份:
+                        {% if admin_info.admin_type == '1' %}
+                            管理员
+                        {% else %}
+                            心理导师
+                        {% endif %}
+                    </span>
+                    {{ admin_info.name }}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" id="user_detail">基本资料</a></dd>
+                    {#          <dd><a href="">安全设置</a></dd>#}
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="{{ url_for('admin.sd_admin_logout') }}">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">树洞能量 - 文章</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="{{ url_for('admin.sd_admin_article_list') }}">文章列表</a></dd>
+                        {% if admin_info.admin_type == '1' %}
+                            <dd><a href="{{ url_for('admin.sd_admin_type_list') }}">文章分类</a></dd>
+                        {% endif %}
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="{{ url_for('admin.sd_admin_message') }}">求助留言 - 留言</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="{{ url_for('admin.sd_admin_test_list') }}">树洞测试 - 心理测试</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="{{ url_for('admin.sd_admin_reservation_list') }}">树洞预约</a>
+                </li>
+
+
+                {% if admin_info.admin_type == '1' %}
+                    <li class="layui-nav-item">
+                        <a class="" href="{{ url_for('admin.sd_admin_announce_list') }}">公告管理</a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a class="" href="javascript:;">权限管理</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="{{ url_for('admin.sd_admin_user') }}">用户</a></dd>
+                            <dd><a href="{{ url_for('admin.sd_admin_teacher') }}">指导老师</a></dd>
+                            <dd><a href="{{ url_for('admin.sd_admin_admin') }}">管理员</a></dd>
+                        </dl>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        {% block body %}
+        {% endblock %}
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+
+    </div>
+</div>
+<script src="{{ url_for('static',filename='layui/layui.js' ) }}"></script>
+<script>
+
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+        var user_detail = $('#user_detail');
+        user_detail.click(function () {
+            var user_type = $('#user_type');
+            var user_id = user_type.attr('user_id')
+
+            if (user_type.attr('user_type') == '0') {
+                var iframe_url = "sd_admin_Tteacher_iframe/" + user_id
+                var iframe_title = '导师信息修改'
+                var area_size = ['400px', '600px']
+            } else if (user_type.attr('user_type') == '1') {
+                var iframe_url = "sd_admin_Tadmin_iframe/" + user_id
+                var iframe_title = '管理员信息修改'
+                var area_size = ['350px', '370px']
+            }
+            console.log(user_type.attr('user_type'), user_id, iframe_url, iframe_title, area_size)
+            layer.open({
+                title: iframe_title,
+                type: 2,
+                area: area_size,
+                fixed: false, //不固定
+                content: iframe_url
+            });
+        })
+    });
+
+
+</script>
+{% block extjs %}
+
+
+{% endblock %}
+</body>
+</html>

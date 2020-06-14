@@ -1,0 +1,148 @@
+{% extends 'admin/index.html' %}
+
+{% block body %}
+    <div style="margin-left: 20px;margin-top: 20px;">
+
+        <h1 style="border-bottom: 1px solid gray;">分类操作</h1>
+        <div style="margin: 5px 0 30px 20px;cursor: pointer;display: inline-block;">
+
+            <a href="javascript:;" id="create">
+                <i class="layui-icon layui-icon-add-1" style="font-size: 17px; color: #1E9FFF;"></i>
+                <span> 添加分类</span>
+            </a>
+        </div>
+
+
+        <h1>分类列表</h1>
+        <div style="height:50%">
+            <table id="article_list" class="layui-table" lay-filter="article_list">
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block extjs %}
+
+
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script>
+
+
+        function change_id_list(data) {
+            let res_list = [];
+            $.each(data, function (index, val) {
+                res_list.push(val.id)
+            });
+            return res_list
+        }
+
+        layui.use('table', function () {
+            var table = layui.table;
+            var article_type = "{{ type }}";
+
+            $('#create').click(function () {
+                layer.prompt({
+                    formType: 0
+                    , title: '添加分类'
+                }, function (value, index) {
+                    $.post("{{ url_for('admin.sd_admin_insert_type') }}", {"name": value},
+                        function (res) {
+                            layer.msg(res['msg']);
+                            if (res['code'] == '200') {
+                                table.reload('article_list');
+                                layer.close(index);
+                            }
+                        }, "json")
+                });
+            })
+
+            // 渲染table
+            table.render({
+                elem: '#article_list'
+                , height: '400'
+                , width: '720'
+                , cellMinWidth: 80
+                , limit: 5
+                , limits: [5, 10, 20]
+                , url: "{{ url_for('admin.sd_admin_type_port') }}"
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print']
+                , title: '文章列表'
+                , cols: [[
+                    {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true}
+                    , {field: 'name', title: '分类名称', width: 470,}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', width: 165}
+                ]]
+                , page: true
+            });
+
+            //监听行工具事件
+            table.on('tool(article_list)', function (obj) {
+                var data = obj.data;
+                // 删除分类
+                if (obj.event === 'del') {
+                    var type_id = data.id;
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url_for('admin.sd_admin_del_type') }}",
+                        async: true,
+                        data: {
+                            'type_id': type_id,
+                        },// 参数
+
+                        success: (function (res) {
+                            if (res['code'] == 200) {
+                                layer.open({
+                                    type: 2,
+                                    area: ['900px', '518px'],
+                                    fixed: false, //不固定
+                                    maxmin: true,
+                                    title:'已关联的文章',
+                                    content: 'sd_admin_del_type_iframe/' + data.id
+                                });
+                            } else {
+                                layer.confirm('真的删除行么', function (index) {
+                                    $.post("{{ url_for('admin.sd_admin_deltype_port') }}", {"type_id": data.id},
+                                        function (res) {
+                                            layer.msg(res['msg']);
+                                            if (res['code'] == 200) {
+                                                table.reload('article_list', {});
+                                            }
+                                        }, "json");
+                                });
+                            }
+                        }),
+
+                        error: (function (e) {
+                            console.log(e)
+                        })
+                    })
+
+                } else if (obj.event === 'edit') {
+                    layer.prompt({
+                        formType: 0
+                        , title: '分类名称'
+                        , value: data.name
+                    }, function (value, index) {
+                        $.post("{{ url_for('admin.sd_admin_update_type') }}", {"name": value, "id": data.id},
+                            function (res) {
+                                layer.msg(res['msg']);
+                                if (res['code'] == '200') {
+                                    obj.update({
+                                        name: res['data']
+                                    });
+                                    layer.close(index);
+                                }
+                            }, "json")
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}

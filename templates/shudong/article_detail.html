@@ -1,0 +1,54 @@
+{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="margin-top: 15px;border-color: #00968875">
+        <legend>树洞能量</legend>
+        <div class="layui-field-box">
+            <article style="width: 100%;margin-top:35px;min-height:500px; ">
+                <aside class="l_box">
+                    <div class="fenlei">
+                        <h2 style="padding: 0;text-align: center;background: #009688bd;color:white">文章分类</h2>
+                        <ul style="text-align: center;">
+                            <li class="article" style="cursor: pointer" a_id="0">
+                                <a href="{{ url_for('shudong.article_select',type_id=0) }}"
+                                        {% if current_type_id == 0 %}
+                                   style="color:red">
+                                        {% else %}
+                                            >
+                                        {% endif %}
+                                全部 [ {{ article | length }} ]
+                                </a>
+                            </li>
+                            {% for type in types %}
+                                <li class="article" style="cursor: pointer" a_id="{{ type.id }}">
+                                    <a href="{{ url_for('shudong.article_select',type_id=type.id) }}"
+                                            {% if current_type_id == type.id %}
+                                       style="color:red">
+                                            {% else %}
+                                                >
+                                            {% endif %}
+                                    {{ type.type_name }} [ {{ type.articles | length }} ]
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </aside>
+                <main class="r_box" style="width: 64%">
+                    <div id="article" style="min-height:450px;">
+                        <div class="title_head" style="width:100%;text-align: center">
+                            <h1 style="font-size: 26px;">{{ article_detail.article_name }}</h1>
+                        </div>
+                        <div class="title_time" style="width:100%;text-align: center;margin:10px;">发表时间： {{ article_detail.article_time }}</div>
+                        <div class="title_body" style="overflow-y:scroll;height:450px;">{{ article_detail.article_content | safe }}</div>
+                    </div>
+                    <div id="article_type" style="display: none">0</div>
+                    <div id="article_sum" style="display: none">{{ pages }}</div>
+                </main>
+            </article>
+        </div>
+    </fieldset>
+
+
+{% endblock %}
+

@@ -1,0 +1,133 @@
+{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="width: 40%;margin: auto;margin-top: 15px;border: 1px solid #009688;">
+        <legend>修改个人信息</legend>
+        <div class="layui-field-box">
+            <div style="margin: auto;">
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" required lay-verify="name" placeholder="请输入姓名"
+                                   autocomplete="off" class="layui-input" style="width:81%" value="{{ user_detail.username }}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">密码</label>
+                        <div class="layui-input-block">
+                            <input id="psd" type="password" name="password" required lay-verify="password" placeholder="请输入密码"
+                                   autocomplete="off" class="layui-input" style="width:81%;float: left" value="{{ user_detail.password }}">
+                            <i class="layui-icon layui-icon-key" id="show_psd" style="font-size: 24px; line-height:37px;color: #1E9FFF;"></i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">手机号</label>
+                        <div class="layui-input-block">
+                            <input  type="text" name="phone" required lay-verify="phone" placeholder="请输入手机号"
+                                   autocomplete="off" class="layui-input" style="width:81%;float: left" value="{{ user_detail.phone }}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">邮箱</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="email" required lay-verify="email" placeholder="请输入邮箱"
+                                   autocomplete="off" class="layui-input" style="width:81%" value="{{ user_detail.email }}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" id="submit" lay-submit lay-filter="formDemo">确认更改</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </fieldset>
+
+{% endblock %}
+
+{% block extjs %}
+    <script>
+        function alert_msg(data) {
+            layer.msg(data['msg']);
+        }
+
+        $('#show_psd').click(function () {
+             let psw = $('#psd')
+            if(psw.attr('type')=='password'){
+                psw.attr('type','text')
+            }else{
+                psw.attr('type','password')
+            }
+        });
+        {#$('#submit').click(function(){#}
+        {#    if($('#birthday').val() == ''){#}
+        {#        layer.msg('请选择生日')#}
+        {#        return false#}
+        {#    }#}
+        {##}
+        {# })#}
+
+
+        layui.use('laydate', function () {
+            //执行一个laydate实例
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#birthday' //指定元素
+            });
+        })
+
+        //Demo
+        layui.use('form', function () {
+            var form = layui.form;
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                $.ajax({
+                    type: "POST",
+                    url: "",
+                    async: true,
+                    data: {
+                        'name': data.field.name,
+                        'password': data.field.password,
+                        'phone': data.field.phone,
+                        'email': data.field.email,
+                    },// 参数
+
+                    success: (function (res) {
+                        alert_msg(res)
+                        if (res['code'] == 200) {
+                            setTimeout(function () {
+                                $(window).attr('location', "{{ url_for('shudong.user_login') }}");
+                             }, 1500,)
+                        }
+                    }),
+
+                    error: (function (e) {
+                        console.log(e)
+                    })
+                })
+                return false;
+            });
+
+            // 表单验证
+            form.verify({
+                name: [
+                    /^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$/
+                    , '名称不合法'
+                ]
+                ,password: [
+                    /^[\S]{6,12}$/
+                    , '密码必须6到12位，且不能出现空格哦'
+                ]
+
+
+            });
+        })
+        ;
+
+
+    </script>
+{% endblock %}

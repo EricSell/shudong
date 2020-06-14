@@ -1,0 +1,143 @@
+{% extends 'admin/index.html' %}
+
+{% block body %}
+    <div style="margin-left: 20px;margin-top: 20px;">
+        <h1 style="border-bottom: 1px solid gray;">树洞测试操作</h1>
+        <div style="margin: 5px 0 30px 20px;cursor: pointer;display: inline-block;">
+
+            <a href="{{ url_for('admin.sd_admin_test_insert') }}">
+                <i class="layui-icon layui-icon-add-1" style="font-size: 17px; color: #1E9FFF;"></i>
+                <span> 添加测试题</span>
+            </a>
+        </div>
+
+
+        <h1>测试列表</h1>
+        <div style="height:50%">
+            <table id="article_list" class="layui-table" lay-filter="article_list">
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block extjs %}
+
+
+
+    <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm" lay-event="getCheckData">全选删除</button>
+            </div>
+    </script>
+
+    <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs  loc" lay-event="open_detail"
+               loc="{{ url_for('admin.sd_admin_article_detail',id=1) }}">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script>
+
+
+        function change_id_list(data) {
+            let res_list = [];
+            $.each(data, function (index, val) {
+                res_list.push(val.id)
+            });
+            return {'id': res_list}
+        }
+
+
+        layui.use('table', function () {
+            var table = layui.table;
+            var article_type = "{{ type }}";
+
+
+            // 删除测试
+            function del_title(obj, index, del_data) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('admin.sd_admin_testdel_port') }}",
+                    async: true,
+                    data: {
+                        'id': JSON.stringify(del_data),
+                    },// 参数
+
+                    success: (function (res) {
+                        layer.msg(res['msg']);
+                        if (res['code'] == 200) {
+                            table.reload('article_list', {});
+                        }
+                    }),
+
+                    error: (function (e) {
+                        console.log(e)
+                    })
+                })
+            }
+
+
+             var total_url = "{{ url_for('admin.sd_admin_test_port') }}"
+
+            console.log(total_url, article_type)
+
+
+            // 渲染table
+            table.render({
+                elem: '#article_list'
+                , height: '400'
+                , width: '1468'
+                , cellMinWidth: 80
+                , limit: 5
+                , limits: [5, 10, 20]
+                , url:total_url
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , defaultToolbar: ['filter', 'exports', 'print']
+                , title: '测试列表'
+                , cols: [[
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true}
+                    , {field: 'name', title: '测试名称', width: 100,}
+                    , {field: 'content', title: '测试内容', width: 800, sort: true}
+                    , {field: 'time', sort: true, align: 'middle', width: 133, title: '测试新增时间'}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', width: 165}
+                ]]
+                , page: true
+            });
+
+
+
+            //监听行工具事件
+            //头工具栏事件
+            table.on('toolbar(article_list)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'getCheckData':
+                        if (!checkStatus.isAll) {
+                            layer.msg('未全选');
+                            break
+                        }
+                        layer.confirm('真的删除行么', function (index) {
+                            var data = checkStatus.data;
+                            var del_data = change_id_list(data)
+                            del_title(obj, index, del_data)
+                        });
+                }
+            });
+
+            //监听行工具事件
+            table.on('tool(article_list)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'del') {
+                    layer.confirm('真的删除行么', function (index) {
+                        let data_list = {'id': [data.id]}
+                        del_title(obj, index, data_list)
+                    });
+                } else if (obj.event === 'open_detail') {
+                    location.href = 'sd_admin_test_detail/' + data.id;
+                }
+            });
+        });
+    </script>
+{% endblock %}

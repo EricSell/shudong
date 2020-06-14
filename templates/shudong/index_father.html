@@ -1,0 +1,77 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>树洞先生-心理健康网站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static',filename='shudong/css/base.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='shudong/css/index.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='shudong/css/m.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">
+
+    <script src="/static/shudong/js/jquery.min.js" type="text/javascript"></script>
+    <script src="{{ url_for('static',filename='layer/layer.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static',filename='layui/layui.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" src="/static/shudong/js/hc-sticky.js"></script>
+    <script type="text/javascript" src="/static/shudong/js/comm.js"></script>
+
+    {% block css %}
+    {% endblock %}
+
+</head>
+
+<body style="width: 65%;margin:auto">
+<div>
+    <div class="layui-layout ">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend style="font-size: 25px;">树洞先生-心理健康网站</legend>
+        </fieldset>
+        <div class="layui-header layui-bg-green">
+            <ul class="layui-nav layui-layout-left layui-bg-green">
+                <li class="layui-nav-item"><a href="{{ url_for('shudong.index') }}">首页</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">中心简介</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="{{ url_for('shudong.center_info',id=1) }}">中心介绍</a></dd>
+                        <dd><a href="{{ url_for('shudong.center_info',id=2) }}">工作职责</a></dd>
+                        <dd><a href="{{ url_for('shudong.center_info',id=3) }}">服务指南</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="{{ url_for('shudong.article_list') }}">树洞能量</a></li>
+                <li class="layui-nav-item"><a href="{{ url_for('shudong.sd_test') }}">树洞测试</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">求助树洞</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="{{ url_for('shudong.sd_message_show') }}">求助留言</a></dd>
+                        <dd><a href="{{ url_for('shudong.sd_contact_teacher') }}">联系导师</a></dd>
+                        <dd><a href="{{ url_for('shudong.sd_reservation') }}">预约</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right layui-bg-green">
+                {% if user %}
+                    <li class="layui-nav-item " id="{{ user.id }}"><a href="{{ url_for('shudong.sd_update_user') }}">{{ user.user_name }}</a></li>
+                    <li class="layui-nav-item "><a href="{{ url_for('shudong.user_logout') }}">退出</a></li>
+                {% else %}
+                    <li class="layui-nav-item "><a href="{{ url_for('shudong.user_login') }}">登录</a></li>
+                    <li class="layui-nav-item "><a href="{{ url_for('shudong.user_register') }}">注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% block body %}
+
+{% endblock %}
+
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+</script>
+
+{% block extjs %}
+{% endblock %}
+</body>
+</html>

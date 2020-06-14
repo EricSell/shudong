@@ -1,0 +1,189 @@
+﻿{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="margin-top: 15px;border-color: #00968875">
+        <legend>树洞留言</legend>
+        <div class="layui-field-box">
+            {# 留言展示 #}
+            <div style="height: 325px;width: 67%;margin: auto;overflow-y:scroll">
+                {# 展示所有的留言 #}
+                <ul id="message" class="layui-timeline">
+                    {% for message in messages %}
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text " style="margin-bottom: 10px;">
+                                <h3 class="layui-timeline-title">{{ message.create_time }}</h3>
+                                <p>留言标题:&nbsp;&nbsp;{{ message.title }}
+                                    <br>留言人:&nbsp;&nbsp;
+                                    {{ message.user.username }}
+                                    <br>留言信息:&nbsp;&nbsp;{{ message.message }}
+                                <hr>
+                                <i class="layui-icon"></i>
+                                {% if message.is_replay %}
+                                    {{ message.teacher.name }}老师:&nbsp;&nbsp;
+                                    {{ message.replay }}
+                                {% else %}
+                                    &nbsp;&nbsp;暂无回复
+                                {% endif %}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                    </li>
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <div class="layui-timeline-title">没有了....
+                                <div>
+                                </div>
+                    </li>
+                </ul>
+                {# 展示登陆用户的留言 #}
+                <ul id="my_message" style="display: none" class="layui-timeline">
+                    {% for message in my_messages %}
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text " style="margin-bottom: 10px;">
+                                <h3 class="layui-timeline-title">{{ message.create_time }}</h3>
+                                <p>留言标题:&nbsp;&nbsp;{{ message.title }}
+                                    <br>留言人:&nbsp;&nbsp;
+                                    {{ message.user.username }}
+                                    <br>留言信息:&nbsp;&nbsp;{{ message.message }}
+                                <hr>
+                                <i class="layui-icon"></i>指导老师:&nbsp;&nbsp;
+                                {% if message.is_replay %}
+                                    {{ message.replay }}
+                                {% else %}
+                                    &nbsp;&nbsp;暂无回复
+                                {% endif %}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                    </li>
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <div class="layui-timeline-title">没有了....</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {# 提交留言 #}
+            <div style="height: 185px;width: 67%;margin: auto;">
+                <div style="width: 80%;margin: auto;margin-top: 20px;">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item" style="margin-top: 60px;">
+                            <label class="layui-form-label">请输入标题:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" required lay-verify="required" placeholder="请输入标题"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">请输入留言:</label>
+                            <div class="layui-input-block">
+                                <textarea name="message" required lay-verify="required" placeholder="请输入"
+                                          class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否匿名</label>
+                            <div class="layui-input-inline" style="width: 19px;">
+                                <input type="checkbox" name="niming" lay-skin="switch" value="1">
+                            </div>
+                            <label class="layui-form-label" style="width: auto;padding-left: 33px;">查看我的留言</label>
+                            <div class="layui-input-inline" style="width: auto;" id="open_message">
+                                {% if user %}
+                                    <input type="checkbox" name="my_message" lay-skin="switch" value="1">
+                                {% else %}
+                                    <input type="checkbox" name="my_message" lay-skin="switch" value="1" disabled>
+                                {% endif %}
+                            </div>
+                            <div class="layui-input-inline">
+                                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+
+                        <div style="display: none" lay-verify="user" id="user">{{ user.user_id }}</div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </fieldset>
+{% endblock %}
+
+{% block extjs %}
+    <script>
+        function change_status(obj) {
+            let obj_status = obj.css('display')
+            if (obj_status == 'none') {
+                obj.css({'display': 'block'}).siblings().css({'display': 'none'})
+            } else {
+                obj.css({'display': 'none'}).siblings().css({'display': 'block'})
+            }
+        }
+
+
+        $('#open_message').click(function () {
+            let user = $('#user').text();
+            if (user == "") {
+                layer.msg('登陆后才能看自己的留言哦')
+            } else {
+                change_status($('#my_message'))
+            }
+        })
+
+        //Demo
+        function alert_msg(data) {
+            layer.msg(data['msg']);
+        }
+
+        layui.use('form', function () {
+            var form = layui.form;
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('shudong.sd_message_save') }}",
+                    async: true,
+                    data: {
+                        'title': data.field.title,
+                        'message': data.field.message,
+                        'niming': data.field.niming,
+                    },// 参数
+
+                    success: (function (res) {
+                        alert_msg(res)
+                        if (res['code'] == 200) {
+                            setTimeout(function () {
+                                $(window).attr('location', "{{ url_for('shudong.sd_message_show') }}");
+                            }, 1500,)
+                        }
+                    }),
+
+                    error: (function (e) {
+                        console.log(e)
+
+                    })
+                })
+                return false;
+            });
+            // 登陆验证
+            form.verify({
+                user: function (value, item) { //value：表单的值、item：表单的DOM对象
+                    if (value == undefined) {
+                        layer.msg('登陆后才能发表留言哦');
+                    }
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

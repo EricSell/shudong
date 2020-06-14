@@ -1,0 +1,68 @@
+{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="margin-top: 15px;border-color: #00968875">
+        <legend>树洞能量</legend>
+        <div class="layui-field-box">
+            <article style="width: 100%;margin-top:35px;min-height:500px; ">
+                <aside class="l_box">
+                    <div class="fenlei">
+                        <h2 style="padding: 0;text-align: center;background: #009688bd;color:white">测试列表</h2>
+                        <ul style="text-align: center;">
+                            {% for test in test_list %}
+                                <li class="article" style="cursor: pointer" test_id="{{ test.id }}">
+                                    <a href="javascript:;"
+                                            {% if test.id == test_detail.id %}
+                                       style="color:red;"
+                                            {% endif %}
+                                    >{{ test.test_title }}</a>
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </aside>
+                <main class="r_box" style="width: 64%">
+                    <div id="article" style="min-height:450px;">
+                        <div class="title_head" style="width:100%;text-align: center">
+                            <h1 style="font-size: 26px;">{{ test_detail.test_title }}</h1>
+                        </div>
+                        <div class="title_time" style="width:100%;text-align: center;margin:10px;">
+                            发表时间： {{ test_detail.create_time }}</div>
+                        <div class="title_body" style="height:450px;font-size: 18px;overflow-y:scroll;">{{ test_detail.test_content | safe }}</div>
+                    </div>
+                    <div id="current_id" style="display: none; ">{{ test_detail.id }}</div>
+                </main>
+            </article>
+        </div>
+    </fieldset>
+
+{% endblock %}
+{% block extjs %}
+    <script>
+        $('.article').click(function () {
+            var article_id = $(this).attr('test_id');
+
+
+            $.post('sd_test_detail', {'test_id': article_id},
+                function (res) {
+                    var title = res['title'];
+                    var content = res['content'];
+                    var time = res['time'];
+
+                    $('#article').empty();
+                    var h1 = $("<h1 style=\"font-size: 26px;\"></h1>").text(title);
+                    var div_head = $("<div class=\"title_head\" style=\"width:100%;text-align: center\"></div>").append(h1);
+                    var title_time = $("<div class=\"title_time\" style=\"width:100%;text-align: center;margin:10px;\">发表时间： </div>").text(time);
+                    var test_content = $("<div class=\"title_body\" style=\"height:450px; font-size: 18px;overflow-y:scroll\"></div>").html(content)
+                    $('#article').append(div_head);
+                    $('#article').append(title_time);
+                    $('#article').append(test_content);
+                    $('#current_id').text(article_id)
+
+                })
+                $(this).children().css({'color': 'red'}).parent().siblings().children().css({'color': 'black'})
+        })
+    </script>
+{% endblock %}
+

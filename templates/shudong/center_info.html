@@ -1,0 +1,12 @@
+{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <div style="margin-top: 10px;">
+    <fieldset class="layui-elem-field" style="margin-top: 15px;border-color: #00968875;">
+        <legend>{{ article.article_name}}</legend>
+        <div class="layui-field-box">
+            {{ article.article_content | safe }}
+        </div>
+    </fieldset>
+    </div>
+{% endblock %}

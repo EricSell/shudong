@@ -1,0 +1,100 @@
+{% extends 'admin/index.html' %}
+
+{% block body %}
+    <form class="layui-form" action="">
+        <div style="width: 96%;margin:30px auto 0;">
+            <div class="layui-card">
+                <div class="layui-card-header" style="font-size: 30px">测试标题:&nbsp;&nbsp;{{ test.test_title }}</div>
+
+            </div>
+            <div style="width: 80%;float: left">
+
+                <textarea id="test_content" style="display: none;" lay-verify="textarea"
+                          name="test_content">{{ test.test_content }}</textarea>
+            </div>
+            <div style="display: inline-block;width: 19%;">
+                <div style="margin-left: 20px;margin-bottom: 40px;">
+                    <div style="font-size: 20px;margin-bottom: 13px;">测试标题</div>
+                    <input style="width: 100%;height: 32px" type="text" name="test_title" required
+                           lay-verify="required" id="test_title"
+                           placeholder="请输入标题" autocomplete="off" class="layui-input"
+                           value="{{ test.test_title }}">
+                </div>
+                <div style="margin-left: 20px;margin-top: 40px;">
+                    <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="formDemo">
+                        保&nbsp;&nbsp;存
+                    </button>
+                </div>
+                <div style="display:none" id='loc' loc=""></div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block extjs %}
+    <script>
+        layui.use(['layedit', 'form'], function () {
+            var layedit = layui.layedit;
+            var form = layui.form;
+
+            var layedit_index = layedit.build('test_content', {
+                height: 450
+                , tool: [
+                    'strong' //加粗
+                    , 'italic' //斜体
+                    , 'underline' //下划线
+                    , 'del' //删除线
+
+                    , '|' //分割线
+
+                    , 'left' //左对齐
+                    , 'center' //居中对齐
+                    , 'right' //右对齐
+                    , 'link' //超链接
+                    , 'unlink' //清除链接
+                    , 'face' //表情
+                ]
+            }); //建立编辑器
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                let test_content = layedit.getContent(layedit_index);
+                let test_name = data.field.test_title;
+
+                $.ajax({
+                    type: "POST",
+                    url: '',
+                    async: true,
+                    data: {
+                        'id':{{ test.id }},
+                        'test_content': test_content,
+                        'test_name': test_name,
+                    },// 参数
+
+                    success: (function (res) {
+                        let btn_text = $("button").text().trim().replace(/\s/g, "");
+                        layer.msg(res['msg']);
+                        if (res['code'] == 200) {
+                            // 拿到当前按钮的值
+                            setTimeout(function () {
+                                $(window).attr('location', "{{ url_for('admin.sd_admin_test_list') }}");
+                            }, 1500,)
+                        }
+
+                    }),
+
+                    error:
+                        (function (e) {
+                            console.log(e)
+                        })
+                })
+                return false;
+            });
+
+
+        })
+        ;
+
+
+    </script>
+{% endblock %}

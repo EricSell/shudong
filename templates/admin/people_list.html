@@ -1,0 +1,124 @@
+{% extends 'admin/index.html' %}
+
+{% block body %}
+    <div style="margin-left: 20px;margin-top: 20px;">
+        {% if  type  == '管理员' or type == '导师' %}
+            <h1 style="border-bottom: 1px solid gray;">{{ type }}操作</h1>
+            <div style="margin: 5px 0 30px 20px;cursor: pointer;display: inline-block;">
+                <a href="javascript:;" lay-even="add_user" id="add_user">
+                    <i class="layui-icon layui-icon-add-1" style="font-size: 17px; color: #1E9FFF;"></i>
+                    <span> 添加{{ type }}</span>
+                </a>
+            </div>
+        {% endif %}
+
+        <h1>{{ type }}列表</h1>
+        <div style="height:50%">
+            <table id="article_list" class="layui-table" lay-filter="article_list">
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block extjs %}
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs  loc" lay-event="edit">编辑</a>
+    </script>
+    <script>
+
+        layui.use('table', function () {
+            var table = layui.table;
+            var user_type = "{{ type }}";
+            if (user_type == '用户') {
+                var total_url = "{{ url_for('admin.sd_admin_Tuser_port') }}"
+                var table_size = '781'
+            } else if (user_type == '导师') {
+                var total_url = "{{ url_for('admin.sd_admin_Tteacher_port') }}"
+                var table_size = '915'
+            } else if (user_type == '管理员') {
+                var total_url = "{{ url_for('admin.sd_admin_Tadmin_port') }}"
+                var table_size = '714'
+             }
+
+
+            // 渲染table
+            table.render({
+                elem: '#article_list'
+                , height: '400'
+                , width: table_size
+                , cellMinWidth: 80
+                , limit: 5
+                , limits: [5, 10, 20]
+                , url: total_url
+                , defaultToolbar: ['filter', 'exports', 'print']
+                , title: user_type + '列表'
+                , cols: [[
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true}
+                    , {field: 'name', title: '名称', width: 100}
+                    , {field: 'phone', title: '手机号', width: 180}
+                    {% if type == '用户' or type =='导师' %}
+                        , {field: 'email', align: 'middle', title: '邮箱', width: 200}
+                    {% endif %}
+                    {% if type == '导师' or type == '管理员'%}
+                        , {field: 'is_use', align: 'middle', title: '是否启用', width: 133}
+                    {% endif %}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', width: 165}
+                ]]
+                , page: true
+            });
+
+            //监听行工具事件
+            table.on('tool(article_list)', function (obj) {
+                var data = obj.data;
+                if (user_type == '用户') {
+                    var iframe_url = "sd_admin_Tuser_iframe/" + data.id
+                    var iframe_title = '用户信息修改'
+                    var area_size  = ['350px', '370px']
+                } else if (user_type == '导师') {
+                    var iframe_url = "sd_admin_Tteacher_iframe/" + data.id
+                    var iframe_title = '导师信息修改'
+                    var area_size = ['400px', '600px']
+                } else if (user_type == '管理员') {
+                    var iframe_url = "sd_admin_Tadmin_iframe/" + data.id
+                    var iframe_title = '管理员信息修改'
+                    var area_size  = ['350px', '370px']
+                }
+                if (obj.event === 'edit') {
+                    layer.open({
+                        title: iframe_title,
+                        type: 2,
+                        area: area_size,
+                        fixed: false, //不固定
+                        content: iframe_url
+                    });
+                }
+            });
+
+            // 添加用户
+            {% if type == '导师' %}
+                var iframe_title = '添加导师'
+                var iframe_url = 'sd_admin_Tteacher_iframe/0'
+                var iframe_size = ['350px', '450px']
+            {% elif type == '管理员' %}
+                var iframe_title = '添加管理员'
+                var iframe_url = 'sd_admin_Tadmin_iframe/0'
+                var iframe_size = ['350px', '340px']
+            {% endif %}
+            $('#add_user').click(function () {
+                console.log(1111, iframe_title, iframe_url)
+                layer.open({
+                    title: iframe_title,
+                    type: 2,
+                    area: iframe_size,
+                    fixed: false, //不固定
+                    content: iframe_url
+                });
+            })
+
+        });
+    </script>
+{% endblock %}

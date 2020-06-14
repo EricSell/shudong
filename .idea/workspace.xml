@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="00330972-d09c-4e85-87a2-5fafabc22fc0" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="flaskblog@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="flaskblog@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="flaskblog@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="flaskblog: schema" type="76f4a085:MysqlImplModel$Schema" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Flask Main" />
+        <option value="JavaScript File" />
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PATH_TO_GIT" value="D:\软件\Git\bin\git.exe" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="ProjectId" id="1Pg7XU4M8lqCfODi2pvXnMZiiYQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="sqlite&#10;mysql" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/templates/admin" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Study\WebFrame\后端项目\陈梦娇-树洞\shudong\templates\admin" />
+      <recent name="D:\Study\WebFrame\后端项目\陈梦娇-树洞\shudong\static\image" />
+      <recent name="D:\Study\Frame\Tornado\FlaskBlog2Pro" />
+      <recent name="D:\Study\Frame\Flask\Day02\code\ModelPro\app" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Study\WebFrame\后端项目\陈梦娇-树洞\shudong\templates\admin" />
+      <recent name="D:\Study\WebFrame\后端项目\陈梦娇-树洞\shudong\templates\shudong" />
+      <recent name="D:\Study\WebFrame\后端项目\陈梦娇-树洞\shudong\templates" />
+      <recent name="D:\Study\WebFrame\后端项目\陈梦娇-树洞\shudong\static\image\teacher" />
+      <recent name="D:\Study\WebFrame\后端项目\陈梦娇-树洞\shudong\static" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="ModelPro" type="Python.FlaskServer">
+      <module name="shudong" />
+      <option name="target" value="$PROJECT_DIR$/manage.py" />
+      <option name="targetType" value="PATH" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="allServicesViewState">
+      <serviceView>
+        <treeState>
+          <expand />
+          <select />
+        </treeState>
+      </serviceView>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="00330972-d09c-4e85-87a2-5fafabc22fc0" name="Default Changelist" comment="" />
+      <created>1566283924169</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1566283924169</updated>
+      <workItem from="1566283925735" duration="273000" />
+      <workItem from="1566285576315" duration="2562000" />
+      <workItem from="1566288361042" duration="253000" />
+      <workItem from="1566288632830" duration="59000" />
+      <workItem from="1566898891771" duration="5006000" />
+      <workItem from="1566906392105" duration="8714000" />
+      <workItem from="1566951402672" duration="3100000" />
+      <workItem from="1566955088756" duration="13000" />
+      <workItem from="1566959143300" duration="15362000" />
+      <workItem from="1566981785033" duration="14659000" />
+      <workItem from="1567038193930" duration="795000" />
+      <workItem from="1567039006874" duration="2452000" />
+      <workItem from="1567041498647" duration="625000" />
+      <workItem from="1567045421292" duration="1853000" />
+      <workItem from="1567055846473" duration="15362000" />
+      <workItem from="1567127681597" duration="12000" />
+      <workItem from="1567164078211" duration="550000" />
+      <workItem from="1567164654456" duration="23051000" />
+      <workItem from="1567227233258" duration="25049000" />
+      <workItem from="1567298699334" duration="19962000" />
+      <workItem from="1567322122283" duration="29000" />
+      <workItem from="1584890205142" duration="1265000" />
+      <workItem from="1585624328239" duration="302000" />
+      <workItem from="1585624677058" duration="38296000" />
+      <workItem from="1585715300001" duration="20536000" />
+      <workItem from="1585798953894" duration="24617000" />
+      <workItem from="1585894559947" duration="30083000" />
+      <workItem from="1585960723743" duration="33741000" />
+      <workItem from="1586070221972" duration="14773000" />
+      <workItem from="1586150496699" duration="8269000" />
+      <workItem from="1586233684184" duration="13087000" />
+      <workItem from="1586417430783" duration="599000" />
+      <workItem from="1586492669031" duration="25000" />
+      <workItem from="1590159398069" duration="371000" />
+      <workItem from="1590289143005" duration="7000" />
+      <workItem from="1590759248626" duration="2463000" />
+      <workItem from="1592099225093" duration="1154000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/shudong$ModelPro.coverage" NAME="ModelPro Coverage Results" MODIFIED="1590761108776" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

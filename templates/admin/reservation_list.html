@@ -1,0 +1,135 @@
+{% extends 'admin/index.html' %}
+
+{% block body %}
+    <div style="margin-left: 20px;margin-top: 20px;">
+
+        <h1>预约列表</h1>
+        <div style="height:50%">
+            <table id="article_list" class="layui-table" lay-filter="article_list">
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extjs %}
+
+    <script type="text/html" id="barDemo">
+        {% if admin_info.admin_type == '0' %}
+            <a class="layui-btn layui-btn-xs  loc" lay-event="process">处理</a>
+            <a class="layui-btn layui-btn-xs  loc" lay-event="finish_process">完成</a>
+        {% endif %}
+        <a class="layui-btn layui-btn-xs  loc" lay-event="delete">删除</a>
+    </script>
+    <script>
+
+        layui.use('table', function () {
+            var table = layui.table;
+            var total_url = "{{ url_for('admin.sd_admin_reservation_port') }}"
+
+            // 渲染table
+            table.render({
+                elem: '#article_list'
+                , height: '400'
+                , cellMinWidth: 80
+                , limit: 5
+                , limits: [5, 10, 20]
+                , url: total_url
+                , defaultToolbar: ['filter', 'exports', 'print']
+                , title: user_type + '列表'
+                , cols: [[
+                    {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true}
+                    , {field: 'name', title: '名称', width: 80}
+                    , {field: 'content', align: 'middle',title: '主要问题', width: 235}
+                    , {field: 'birthday', align: 'middle', title: '生日', width: 110}
+                    , {field: 'phone',align: 'middle', title: '手机号', width: 130}
+                    , {field: 'wechat', align: 'middle', title: '微信', width: 130}
+                    , {field: 'QQ', align: 'middle', title: 'QQ', width: 130}
+                    , {field: 'process', align: 'middle', title: '处理状态', width: 100}
+                    , {field: 'time', align: 'middle', title: '预约时间', width: 160, sort: true}
+                    , {field: 'teacher', align: 'middle', title: '处理导师', width: 130, sort: true}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', width: 165}
+                ]]
+                , page: true
+            });
+
+            //监听行工具事件
+            table.on('tool(article_list)', function (obj) {
+                var data = obj.data;
+
+                if (obj.event === 'delete') {
+                    layer.confirm('真的删除行么', function (index) {
+                        // 删除
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url_for('admin.sd_admin_reverdel_port') }}",
+                            async: true,
+                            data: {
+                                'id': data.id,
+                            },// 参数
+
+                            success: (function (res) {
+                                layer.msg(res['msg']);
+                                if (res['code'] == 200) {
+                                    table.reload('article_list', {});
+                                }
+                            }),
+
+                            error: (function (e) {
+                                console.log(e)
+                            })
+                        })
+                    })
+                } else if (obj.event === 'process') {
+                    layer.confirm('是否处理该预约', function (index) {
+                        // 删除
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url_for('admin.sd_admin_reverpro_port') }}",
+                            async: true,
+                            data: {
+                                'id': data.id,
+                                'teacher_id':{{ admin_info.id }}
+                            },// 参数
+
+                            success: (function (res) {
+                                layer.msg(res['msg']);
+                                if (res['code'] == 200) {
+                                    table.reload('article_list', {});
+                                }
+                            }),
+
+                            error: (function (e) {
+                                console.log(e)
+                            })
+                        })
+                    })
+                } else if (obj.event === 'finish_process') {
+                    layer.confirm('是否完成预约', function (index) {
+                        // 删除
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url_for('admin.sd_admin_reverfin_port') }}",
+                            async: true,
+                            data: {
+                                'id': data.id,
+                                'teacher':{{ admin_info.id }}
+                            },// 参数
+
+                            success: (function (res) {
+                                layer.msg(res['msg']);
+                                if (res['code'] == 200) {
+                                    table.reload('article_list', {});
+                                }
+                            }),
+
+                            error: (function (e) {
+                                console.log(e)
+                            })
+                        })
+                    })
+                }
+            });
+        });
+    </script>
+{% endblock %}

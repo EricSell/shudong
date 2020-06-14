@@ -1,0 +1,65 @@
+﻿{% extends 'shudong/index_father.html' %}
+
+{% block body %}
+    <fieldset class="layui-elem-field" style="margin-top: 15px;border-color: #00968875">
+        <legend>树洞测试</legend>
+        <div class="layui-field-box">
+            <div style="height: 300px;width: 67%;margin: auto;position: relative">
+                <div id="test_list"></div>
+                <div style="margin: auto;width: 100%;text-align: center;position: absolute;bottom: 0px" id="page"></div>
+            </div>
+
+        </div>
+        <div style="display: none" id="test_number">{{ test_number }}</div>
+    </fieldset>
+{% endblock %}
+
+{% block extjs %}
+    <script>
+        var test_number = $('#test_number').text()
+
+
+        function showRecord(pageNo, pageSize) {
+            $.get("{{ url_for('shudong.sd_test_list_port') }}",
+                {
+                    page: pageNo,
+                    per_page: pageSize,
+                },
+                function (date) {
+                    let res = date.tests
+                    console.log(res)
+                    //加载后台返回的List集合数据
+                    for (var i = 0; i < res.length; i++) {
+                        var a = $("<a href=\"#\" style=\"color:#009688bd;font-size: 19px;  padding-left: 15px;\"></a>").text(res[i].name);
+                        var div1 = $("<div style=\"margin-left: 100px;border-bottom: 1px solid #009688bd;margin-bottom: 15px;\"></div>").append(a);
+                        var div2 = $("<div class=\"layui-anim layui-anim-up\" style=\"width:90%;\"></div>").append(div1);
+                         a.attr('href','/sd_test_detail/'+res[i].id)
+                        $('#test_list').append(div2);
+                    }
+                },
+                "json"
+            );
+        }
+
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+                , count: test_number //数据总数，从服务端得到
+                , limit: 5
+                , groups: 3
+                , jump: function (obj, first) { //obj为当前页的属性和方法，第一次加载first为true
+                    //非首次加载 do something
+                    {#if (!first) {#}
+                        //清空以前加载的数据
+                        $('#test_list').empty();
+                        //调用加载函数加载数据
+                        showRecord(obj.curr, obj.limit);
+                    {# }#}
+                }
+            });
+        });
+    </script>
+{% endblock %}
