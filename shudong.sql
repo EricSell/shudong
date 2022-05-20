@@ -178,10 +178,10 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (4, '大佬橙', '18911527103', '123123', '2370362057@qq.com');
+INSERT INTO `user` VALUES (4, '大佬橙', '18911527103', '123123', '2370362123@qq.com');
 INSERT INTO `user` VALUES (9, '111aaa', '11111112323', '123123', '12@qq.com');
-INSERT INTO `user` VALUES (10, NULL, NULL, '123123', '2370362057@qq.com');
-INSERT INTO `user` VALUES (11, '测试人员一号', '18911527111', '123123', '2370362057@qq.com');
+INSERT INTO `user` VALUES (10, NULL, NULL, '123123', '2370362123@qq.com');
+INSERT INTO `user` VALUES (11, '测试人员一号', '18911527111', '123123', '2370362123@qq.com');
 
 -- ----------------------------
 -- Table structure for user_message
